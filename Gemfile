@@ -1,8 +1,9 @@
 source 'http://rubygems.org'
 
-ruby '1.9.3'
+ruby '2.0.0'
 
-gem 'rails', '3.2.8'
+# bump rails version up to prevent attacks found in january, 13
+gem 'rails', '3.2.11'
 gem 'gravatar_image_tag', '1.0.0.pre2'
 gem "will_paginate", :git => "https://github.com/p7r/will_paginate.git", :branch => "rails3"
 gem 'nifty-generators'
@@ -32,6 +33,8 @@ gem 'nokogiri'
 gem 'table_builder', '0.0.3', :git => 'git://github.com/jchunky/table_builder.git'
 gem 'jquery-ui-rails', :git => 'git://github.com/techbang/jquery-ui-rails'
 gem 'rails_autolink'
+
+gem 'sidekiq'
 
 group :development do
   gem 'annotate', '2.4.0'
@@ -65,4 +68,3 @@ group :production do
   gem 'pg'
   gem 'thin'
 end
-

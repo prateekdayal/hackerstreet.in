@@ -73,11 +73,15 @@ class Story < ActiveRecord::Base
   private
 
   def enqueue_create_or_update_document_job
-    Delayed::Job.enqueue CreateOrUpdateSwiftypeDocumentJob.new(self.id)
+    #Delayed::Job.enqueue CreateOrUpdateSwiftypeDocumentJob.new(self.id)
+
+    SwiftypeUpsert.perform_async(self.id)
   end
 
   def enqueue_delete_document_job
-    Delayed::Job.enqueue DeleteSwiftypeDocumentJob.new(self.id)
+    #Delayed::Job.enqueue DeleteSwiftypeDocumentJob.new(self.id)
+
+    SwiftypeDelete.perform_async(self.id)
   end
 
 end

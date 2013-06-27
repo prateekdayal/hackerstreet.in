@@ -19,23 +19,28 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, 
          :recoverable, :rememberable, :trackable, :validatable
 
+  attr_accessor :login
+
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :karma, :ignore, :admin, :email, :password, :password_confirmation
+  attr_accessible :name, :karma, :ignore, :admin, :email, :password, :password_confirmation, :login
 
   acts_as_voter
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
-  validates :name,  :presence => true,
-                    :length   => { :maximum => 50 }
-  validates :email, :format     => { :with => email_regex },
-                    :uniqueness => { :case_sensitive => false }
-  validates :password, :presence => true,
-                       :confirmation => true,
-                       :length => { :within => 6..40 }
-  
-  has_many :stories,    :dependent => :destroy
-  has_many :comments, as: :commentable,   :dependent => :destroy
+  validates_length_of :name, maximum: 50
+
+  validates_format_of :twitter, with: /(\A@?[a-zA-Z0-9]]+\Z)|(\Ahttps?:\/\/(www\.)?twitter\.com\/(#!)?[a-zA-Z0-9]+)/
+
+  validates_format_of :github, with: /(\A@?[a-zA-Z0-9]]+\Z)|(\Ahttps?:\/\/(www\.)?github\.com\/[a-zA-Z0-9]+)/
+  # validates :email, :format     => { :with => email_regex },
+  #                  :uniqueness => { :case_sensitive => false }
+  # validates :password, :presence => true,
+  #                     :confirmation => true,
+  #                     :length => { :within => 6..40 }
+
+  has_many :stories,    dependent: :destroy
+  has_many :comments, as: :commentable, dependent: :destroy
 
   scope :with_role, lambda { |role| {:conditions => "roles_mask & #{2**ROLES.index(role.to_s)} > 0"} }
   
@@ -66,6 +71,23 @@ class User < ActiveRecord::Base
   def decrease_karma
     self.karma += 1
     save
+  end
+
+  before_save do
+    if !self.twitter.blank?
+      #self.twitter.gsub!(/.*([^a-zA-Z0-9]+)/,'')
+      #  must start with either @ followed by alphanums, or with http(s)://twitter
+
+    end
+  end
+
+  def self.find_first_by_auth_conditions(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions).where(['name = :value OR email = :value', { value: login.downcase }]).first
+    else
+      where(conditions).first
+    end
   end
   
   

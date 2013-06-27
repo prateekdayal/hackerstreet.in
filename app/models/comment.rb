@@ -4,14 +4,14 @@ class Comment < ActiveRecord::Base
   belongs_to :user
   belongs_to :commentable, polymorphic: true
   belongs_to :story
-  belongs_to :comment, :foreign_key => "comment_id"
+  belongs_to :comment, foreign_key: 'comment_id'
   has_many :comments, as: :commentable
   attr_accessible :body
   acts_as_voteable
 
   validates_presence_of :body
 
-  validates :body, :presence => true
+  #validates :body, :presence => true
 
 
 
