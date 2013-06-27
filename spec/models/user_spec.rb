@@ -8,6 +8,26 @@ describe User do
       :password => "foobar"
     }
   end
+
+  it 'should throw an error on invalid twitter handle' do
+    invalid_twitter_user = User.new(@attr.merge(twitter: 'he@3'))
+    invalid_twitter_user.should_not be_valid
+  end
+
+  it 'should accept valid twitter handle' do
+    valid_twitter_user = User.new(@attr.merge(twitter: 'heroicamit'))
+    valid_twitter_user.should be_valid
+  end
+
+  it 'should throw an error on invalid github handle' do
+    invalid_github_user = User.new(@attr.merge(github: 'he@3'))
+    invalid_github_user.should_not be_valid
+  end
+
+  it 'should accept valid github handle' do
+    invalid_github_user = User.new(@attr.merge(github: 'heroicamit'))
+    invalid_github_user.should be_valid
+  end
   
   it "should require a name" do
     no_name_user = User.new(@attr.merge(:name => ""))

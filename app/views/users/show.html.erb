@@ -6,7 +6,19 @@
         <%= @user.name %>
       </h1>
       <div> 
-        <p><%= "karma = #{@user.karma}" %>   
+        <p><%= "karma = #{@user.karma}" %>
+        <% if !@user.twitter.blank? %>
+            <p>Twitter: <%= link_to "@#{@user.twitter}", "http://twitter.com/#{@user.twitter}" %></p>
+        <% end %>
+        <% if !@user.facebook.blank? %>
+            <p>Facebook: <%= link_to @user.facebook, @user.facebook %></p>
+        <% end %>
+        <% if !@user.github.blank? %>
+            <p>Github: <%= link_to "@#{@user.github}", "http://github.com/#{@user.github}" %></p>
+        <% end %>
+        <% if !@user.linkedin.blank? %>
+            <p>Linkedin: <%= link_to @user.linkedin, @user.linkedin %></p>
+        <% end %>
         <p><%= link_to "comments", comments_user_path %> 
         <p><%= link_to "stories", stories_user_path %>    
         <p><%= link_to "Change Settings", edit_user_registration_path %><p>

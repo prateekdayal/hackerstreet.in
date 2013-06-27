@@ -22,17 +22,15 @@ class User < ActiveRecord::Base
   attr_accessor :login
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :karma, :ignore, :admin, :email, :password, :password_confirmation, :login
+  attr_accessible :name, :karma, :ignore, :admin, :email, :password, :password_confirmation, :login, :linkedin, :twitter, :facebook, :github
 
   acts_as_voter
 
-  email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-
   validates_length_of :name, maximum: 50
 
-  validates_format_of :twitter, with: /(\A[a-zA-Z0-9]]+\Z)/
+  validates_format_of :twitter, with: /(\A[a-zA-Z0-9]+\Z)/, allow_blank: true, allow_nil: true
 
-  validates_format_of :github, with: /(\A[a-zA-Z0-9]]+\Z)/
+  validates_format_of :github, with: /(\A[a-zA-Z0-9]+\Z)/, allow_blank: true, allow_nil: true
   # validates :email, :format     => { :with => email_regex },
   #                  :uniqueness => { :case_sensitive => false }
   # validates :password, :presence => true,
